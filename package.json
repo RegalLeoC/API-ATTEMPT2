@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch './**/*.ts' --exec ts-node src/index.ts",
-    "generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -n supermarketMigration -p"
+    "generate": "typeorm migration:create ./src/migrations/Test"
   },
   "keywords": [],
   "author": "",

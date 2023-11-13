@@ -1,4 +1,11 @@
 import { createConnection } from "typeorm"
+import { DataSource} from "typeorm"
+import "reflect-metadata"
+import { User } from "./entities/User"
+import {DetailsBuy} from "./entities/DetailsBuy"
+import {Product} from "./entities/Product"
+import {PromotionalProduct} from "./entities/PromotionalProduct"
+import {Purchase} from "./entities/Purchase"
 
 
 const main = async () => {
