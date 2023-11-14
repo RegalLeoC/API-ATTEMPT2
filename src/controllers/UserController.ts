@@ -8,10 +8,10 @@ class UserController {
     try {
       const userRepository = getRepository(User);
       const users = await userRepository.find();
-      res.json(users);
+      return res.json(users);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -25,10 +25,10 @@ class UserController {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      res.json(user);
+      return res.json(user);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -55,10 +55,11 @@ class UserController {
 
       await userRepository.save(newUser);
 
-      res.status(201).json(newUser);
+      return res.status(201).json(newUser);
+
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -82,10 +83,10 @@ class UserController {
 
       await userRepository.save(user);
 
-      res.json(user);
+      return res.json(user);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 
@@ -101,10 +102,10 @@ class UserController {
 
       await userRepository.remove(user);
 
-      res.json({ message: 'User deleted successfully' });
+      return res.json({ message: 'User deleted successfully' });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 }
