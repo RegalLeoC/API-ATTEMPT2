@@ -3,6 +3,7 @@ import { Purchase } from "src/entities/Purchase";
 import { getRepository } from "typeorm";
 import { Product } from '../entities/Product';
 import { error } from "console";
+// import new from './UserController';
 
 
 class PurchasController 
@@ -43,21 +44,22 @@ class PurchasController
         }
     }
 
+    /*
     async createPurchase(req: Request, res: Response)
     {
         try
         {
-            const { descrip, client_name, total_price, total_products } = req.body;
+            const { description, client_name, total_price, total_products } = req.body;
 
 
-            if (!descrip || !client_name || !total_price || !total_products)
+            if (!description || !client_name || !total_price || !total_products)
             {
                 return res.status(400).json( {error: "Error, Empty Data"});
             }
             
             const purchaseRepository = getRepository(Purchase);
             const newPurchase = purchaseRepository.create({
-                    description, //Error, por el TypeORM??
+                    description, 
                     client_name, 
                     total_price, 
                     total_products, 
@@ -77,6 +79,9 @@ class PurchasController
         }
         
     }
+    */
 
-
+    
 }
+
+export default PurchasController;
