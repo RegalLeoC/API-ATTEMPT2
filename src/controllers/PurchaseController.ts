@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Purchase } from "src/entities/Purchase";
 import { getRepository } from "typeorm";
 import { Product } from '../entities/Product';
+import { error } from "console";
 
 
 class PurchasController 
@@ -40,6 +41,42 @@ class PurchasController
             console.log(err);
             return res.status(500).json({ err: 'Internal Server Error'});
         }
+    }
+
+    async createPurchase(req: Request, res: Response)
+    {
+        try
+        {
+            const { descrip, client_name, total_price, total_products } = req.body;
+
+
+            if (!descrip || !client_name || !total_price || !total_products)
+            {
+                return res.status(400).json( {error: "Error, Empty Data"});
+            }
+            
+            const purchaseRepository = getRepository(Purchase);
+            const newPurchase = purchaseRepository.create({
+                    description, //Error, por el TypeORM??
+                    client_name, 
+                    total_price, 
+                    total_products, 
+                    create_date : new Date(),
+                    create_user : new Date(),
+                    update_date: new Date(),
+                    active : 1,
+                });
+            await purchaseRepository.save(newPurchase);
+
+            return res.status(201).json(newPurchase);
+        }
+        catch(err)
+        {
+            console.log(err);
+            return res.status(500).json({ err: 'Internal Server Error'});
+        }
         
     }
+
+
 }
