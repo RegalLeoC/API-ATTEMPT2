@@ -30,14 +30,14 @@ export class Product extends BaseEntity{
   @Column('datetime')
   create_date: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true, cascade: true })
   create_user_FK: User;
+
+  @ManyToOne(() => User, { eager: true, cascade: true })
+  update_user_FK: User;
 
   @Column('datetime')
   update_date: Date;
-
-  @ManyToOne(() => User)
-  update_user_FK: User;
 
   @Column()
   active: number;

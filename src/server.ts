@@ -2,6 +2,7 @@ import express from "express";
 import { AppDataSource } from './index'
 import userRoutes from './routes/user.routes';
 import { User } from './entities/User';
+import productRoutes from './routes/product.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ AppDataSource.then(async(connection) => {
     console.log('Connected to supermarket Database')
 
     app.use('/api', userRoutes);
+    app.use('/api', productRoutes);
 
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`)
