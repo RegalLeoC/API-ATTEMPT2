@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import { Purchase } from "src/entities/Purchase";
-import { getRepository } from "typeorm";
-import { Product } from '../entities/Product';
-import { error } from "console";
+import { DeepPartial, getRepository } from "typeorm";
 // import new from './UserController';
 
 
 class PurchasController 
 {
+
     async getPurchases(req: Request, res : Response)
     {
         try
@@ -44,7 +43,7 @@ class PurchasController
         }
     }
 
-    /*
+    
     async createPurchase(req: Request, res: Response)
     {
         try
@@ -57,19 +56,27 @@ class PurchasController
                 return res.status(400).json( {error: "Error, Empty Data"});
             }
             
-            const purchaseRepository = getRepository(Purchase);
-            const newPurchase = purchaseRepository.create({
-                    description, 
-                    client_name, 
-                    total_price, 
-                    total_products, 
-                    create_date : new Date(),
-                    create_user : new Date(),
-                    update_date: new Date(),
-                    active : 1,
-                });
+            const purchaseRepository = getRepository(Purchase)
+            const partialPurchaseArray = [
+               {
+                description,
+                client_name, 
+                total_price, 
+                total_products, 
+                create_date : new Date(),
+                create_user:"admin",
+                update_date: new Date(),
+                active : "1",
+               },
+                
+              ];
+
+
+
+            const newPurchase = purchaseRepository.create(partialPurchaseArray);
             await purchaseRepository.save(newPurchase);
 
+            
             return res.status(201).json(newPurchase);
         }
         catch(err)
@@ -79,9 +86,6 @@ class PurchasController
         }
         
     }
-    */
-
-    
 }
 
-export default PurchasController;
+export default new PurchasController();
