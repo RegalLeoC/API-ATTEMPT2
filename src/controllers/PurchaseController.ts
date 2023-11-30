@@ -56,6 +56,8 @@ class PurchasController
                 return res.status(400).json( {error: "Error, Empty Data"});
             }
             
+
+            //Verificar que si jale, ya que es un arreglo ahora
             const purchaseRepository = getRepository(Purchase)
             const partialPurchaseArray = [
                {
@@ -76,7 +78,7 @@ class PurchasController
             const newPurchase = purchaseRepository.create(partialPurchaseArray);
             await purchaseRepository.save(newPurchase);
 
-            
+
             return res.status(201).json(newPurchase);
         }
         catch(err)
