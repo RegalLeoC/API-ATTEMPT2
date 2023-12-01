@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Purchase } from "src/entities/Purchase";
+import { Purchase } from "../entities/Purchase";
 import { DeepPartial, getRepository } from "typeorm";
 // import new from './UserController';
 
@@ -18,6 +18,7 @@ class PurchasController
         catch(err)
         {
             console.log(err);
+            console.error('Error caught:', err);
             return res.status(500).json({ err: 'Internal Server Error'});
         }
     }
@@ -39,7 +40,7 @@ class PurchasController
         catch(err)
         {
             console.log(err);
-            return res.status(500).json({ err: 'Internal Server Error'});
+            return res.status(500).json({ err: 'Internal Server Error PurchaseID'});
         }
     }
 
@@ -83,7 +84,7 @@ class PurchasController
         }
         catch(err)
         {
-            console.log(err);
+            console.error('Error caught:', err);
             return res.status(500).json({ err: 'Internal Server Error'});
         }
         

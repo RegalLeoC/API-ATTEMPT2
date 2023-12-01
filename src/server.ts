@@ -13,8 +13,6 @@ AppDataSource.then(async(connection) => {
     console.log('Connected to supermarket Database')
 
     app.use('/api', userRoutes);
-
-
     app.use('/api', purchaseRoutes);
 
     app.listen(PORT, () => {
