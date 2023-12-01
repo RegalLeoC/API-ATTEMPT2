@@ -12,6 +12,9 @@ export class Purchase extends BaseEntity{
   client_name: string;
 
   @Column({ length: 45 })
+  last_name: string;
+
+  @Column({ length: 45 })
   total_price: string; // Consider using a numeric type
 
   @Column({ length: 45 })

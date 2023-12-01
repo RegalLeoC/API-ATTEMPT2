@@ -27,14 +27,25 @@ class PurchasController
     {
         try
         {
+            // console.log("---------------------------------------------------");
+            // console.log("Purchase ID:", req.params.id, "Tipo:" , typeof req.params.id);
             const purchaseId = parseInt(req.params.id, 10);
             const purchaseRepository = getRepository(Purchase);
+
+
+            // if (isNaN(purchaseId)) {
+            //     console.log("Purchase ID:", purchaseId, "Tipo:" , typeof purchaseId);
+            //     return res.status(400).json({ error: 'Invalid purchase ID' });
+            //   }
+
             const purchase = await purchaseRepository.findOne( { where : {id : purchaseId}});
 
             if(!purchase)
             {
                 return res.status(404).json({ error: "Purchase Not Found"}) 
             }
+
+
             return res.json(purchase)
         }
         catch(err)
@@ -49,10 +60,10 @@ class PurchasController
     {
         try
         {
-            const { description, client_name, total_price, total_products } = req.body;
+            const { description, client_name, last_name ,total_price, total_products, create_user, active} = req.body;
 
 
-            if (!description || !client_name || !total_price || !total_products)
+            if (!description || !client_name || !last_name || !total_price || !total_products || !create_user || !active)
             {
                 return res.status(400).json( {error: "Error, Empty Data"});
             }
@@ -64,12 +75,13 @@ class PurchasController
                {
                 description,
                 client_name, 
+                last_name,
                 total_price, 
                 total_products, 
                 create_date : new Date(),
-                create_user:"admin",
+                create_user,
                 update_date: new Date(),
-                active : "1",
+                active,
                },
                 
               ];

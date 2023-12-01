@@ -5,7 +5,8 @@ const router =  express.Router();
 
 router.get('/purchases', PurchasController.getPurchases);
 
-router.get('/purchase:id', PurchasController.getPurchaseById)
+router.get('/purchase/:id', PurchasController.getPurchaseById)
+
 
 router.post('/purchase', PurchasController.createPurchase)
 
