@@ -3,6 +3,7 @@ import { AppDataSource } from './index'
 import userRoutes from './routes/user.routes';
 import { User } from './entities/User';
 import purchaseRoutes from './routes/purchase.routes';
+import statisticsRoutes from './routes/statistics.routes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,6 +15,7 @@ AppDataSource.then(async(connection) => {
 
     app.use('/api', userRoutes);
     app.use('/api', purchaseRoutes);
+    app.use('/api', statisticsRoutes);
 
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`)
