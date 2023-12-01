@@ -27,16 +27,9 @@ class StatisticsController
     {
         try
         {
-            // console.log("---------------------------------------------------");
-            // console.log("Purchase ID:", req.params.id, "Tipo:" , typeof req.params.id);
             const statisticsId = parseInt(req.params.id, 10);
             const statisticsRepository = getRepository(Statistics);
 
-
-            // if (isNaN(purchaseId)) {
-            //     console.log("Purchase ID:", purchaseId, "Tipo:" , typeof purchaseId);
-            //     return res.status(400).json({ error: 'Invalid purchase ID' });
-            //   }
 
             const statistics = await statisticsRepository.findOne( { where : {id : statisticsId}});
 
@@ -69,7 +62,7 @@ class StatisticsController
             }
             
 
-            //Verificar que si jale, ya que es un arreglo ahora
+            
             const statisticsRepository = getRepository(Statistics)
             const partialStatisticArray = [
                {
