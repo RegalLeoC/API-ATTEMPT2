@@ -88,6 +88,8 @@ class StatisticsController
             console.error('Error caught:', err);
             return res.status(500).json({ err: 'Internal Server Error'});
         }
+
+        //Arreglar la Base de Datos
         
     }
 }
