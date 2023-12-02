@@ -28,4 +28,5 @@ export class Purchase extends BaseEntity{
 
   @Column({ length: 45 })
   active: string;
+
 }
