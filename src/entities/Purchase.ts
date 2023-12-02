@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn} from 'typeorm';
 
-@Entity()
+@Entity( {name: 'purchase'})
 export class Purchase extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
@@ -10,6 +10,9 @@ export class Purchase extends BaseEntity{
 
   @Column({ length: 45 })
   client_name: string;
+
+  @Column({ length: 45 })
+  last_name: string;
 
   @Column({ length: 45 })
   total_price: string; // Consider using a numeric type
@@ -30,3 +33,5 @@ export class Purchase extends BaseEntity{
   active: string;
 
 }
+
+
