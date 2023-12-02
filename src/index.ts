@@ -7,7 +7,7 @@ export const AppDataSource = createConnection({
   port: 3306,
   username: 'root',
   password: '@Ak47gamer',
-  database: 'apisupermercado',
+  database: 'apsupermercado',
   synchronize: false,
   logging: true,
   entities: ['src/entities/**/*.ts'],
