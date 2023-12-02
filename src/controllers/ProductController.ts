@@ -1,50 +1,87 @@
-// src/controllers/ProductController.ts
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { getRepository, DeepPartial } from 'typeorm';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 import { FindOneOptions } from 'typeorm';
 
-
 export default class ProductController {
   static getAllProducts = async (req: Request, res: Response) => {
     const productRepository = getRepository(Product);
-    const products = await productRepository.find();
-    res.json(products);
+
+    try {
+      const filterOptions: any = {};
+      if (req.query.category) {
+        filterOptions.category = req.query.category;
+      }
+
+      const products = await productRepository.find({
+        where: filterOptions,
+        relations: ['create_user_FK', 'update_user_FK'],
+      });
+
+      return res.json(products);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
   };
 
   static getProductById = async (req: Request, res: Response) => {
     const productId = parseInt(req.params.id, 10);
     const productRepository = getRepository(Product);
 
-    const product = await productRepository.findOne({
-      where: { id: productId },
-    } as FindOneOptions<Product>); // Explicitly specify the type
+    try {
+      const product = await productRepository.findOne({
+        where: { idproducts: productId },
+        relations: ['create_user_FK', 'update_user_FK'],
+      });
 
-    if (product) {
-      res.json(product);
-    } else {
-      res.status(404).json({ message: 'Product not found' });
+      if (product) {
+        return res.json(product);
+      } else {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching product by ID:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
 
   static createProduct = async (req: Request, res: Response) => {
     const productRepository = getRepository(Product);
     const userRepository = getRepository(User);
-  
+
     try {
-      // Destructure the required fields from the request body
-      const { name, description, price, category, maker, stock, measurement, type, Barcode } = req.body;
-  
-      // Validate input data
-      if (!name || !description || !price || !maker || !stock || !measurement || !type || !Barcode) {
+      const {
+        name,
+        description,
+        price,
+        category,
+        maker,
+        stock,
+        measurement,
+        userId,
+        type,      // Add handling for 'type' column
+        Barcode,   // Add handling for 'Barcode' column
+      } = req.body;
+
+      if (!name || !description || !price || !maker || !stock || !measurement || !userId) {
         return res.status(400).json({ message: 'Missing required fields' });
       }
-  
-      // Assuming you have user information in the request
-      const create_user_FK = await userRepository.findOne(req.user.id);
-  
-      // Create a new product instance
+
+      const userIdInt = parseInt(userId, 10);
+      if (isNaN(userIdInt)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+      }
+
+      const create_user_FK = await userRepository.findOne({
+        where: { id: userIdInt },
+      });
+
+      if (!create_user_FK) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
       const newProduct = productRepository.create({
         name,
         description,
@@ -53,66 +90,98 @@ export default class ProductController {
         maker,
         stock,
         measurement,
+        type,      // Include 'type' in the creation process
+        Barcode,   // Include 'Barcode' in the creation process
         create_user_FK,
         update_user_FK: create_user_FK,
-        active: 1, // Set to 1 by default (active)
-        type,
-        Barcode,
-      });
-  
-      // Save the new product to the database
+        create_date: new Date(),
+        update_date: new Date(),
+        active: 1,
+      } as DeepPartial<Product>);
+
       const savedProduct = await productRepository.save(newProduct);
-  
-      // Respond with the created product
-      return res.status(201).json(savedProduct);
+
+      const productWithUserData = await productRepository.findOne({
+        where: { idproducts: savedProduct.idproducts },
+        relations: ['create_user_FK', 'update_user_FK'],
+      } as FindOneOptions<Product>);
+
+      return res.status(201).json(productWithUserData);
     } catch (error) {
-      // Handle specific errors (e.g., database constraint violations)
-      if (error.code === 'SOME_SPECIFIC_ERROR_CODE') {
-        return res.status(400).json({ message: 'Validation error' });
-      }
-  
-      // Handle any other errors
       console.error('Error creating product:', error);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
-  
 
   static updateProduct = async (req: Request, res: Response) => {
     const productRepository = getRepository(Product);
     const userRepository = getRepository(User);
 
-    const { name, description, price, category, maker, stock, measurement, type, Barcode } = req.body;
-    const update_user_FK = await userRepository.findOne(req.user.id); // Assuming you have user information in the request
+    try {
+      const userId = parseInt(req.params.id, 10);
+      const update_user_FK = await userRepository.findOne({
+        where: { id: userId },
+      } as FindOneOptions<User>);
 
-    await productRepository.update(req.params.id, {
-      name,
-      description,
-      price,
-      category,
-      maker,
-      stock,
-      measurement,
-      update_user_FK,
-      type,
-      Barcode,
-    });
+      if (!update_user_FK) {
+        return res.status(404).json({ message: 'User not found for update' });
+      }
 
-    const updatedProduct = await productRepository.findOne(req.params.id);
-    if (updatedProduct) {
-      res.json(updatedProduct);
-    } else {
-      res.status(404).json({ message: 'Product not found' });
+      const productId = parseInt(req.params.id, 10);
+      const existingProduct = await productRepository.findOne({
+        where: { idproducts: productId },
+      });
+
+      if (!existingProduct) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+
+      const {
+        name,
+        description,
+        price,
+        category,
+        maker,
+        stock,
+        measurement,
+        type,      // Add handling for 'type' column
+        Barcode,   // Add handling for 'Barcode' column
+      } = req.body;
+
+      existingProduct.name = name || existingProduct.name;
+      existingProduct.description = description || existingProduct.description;
+      existingProduct.price = price || existingProduct.price;
+      existingProduct.category = category || existingProduct.category;
+      existingProduct.maker = maker || existingProduct.maker;
+      existingProduct.stock = stock || existingProduct.stock;
+      existingProduct.measurement = measurement || existingProduct.measurement;
+      existingProduct.type = type || existingProduct.type;       // Update 'type' column
+      existingProduct.Barcode = Barcode || existingProduct.Barcode; // Update 'Barcode' column
+      existingProduct.update_user_FK = update_user_FK;
+
+      await productRepository.save(existingProduct);
+
+      return res.json(existingProduct);
+    } catch (error) {
+      console.error('Error updating product:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
 
   static deleteProduct = async (req: Request, res: Response) => {
     const productRepository = getRepository(Product);
-    const deletedProduct = await productRepository.delete(req.params.id);
-    if (deletedProduct.affected === 1) {
-      res.json({ message: 'Product deleted successfully' });
-    } else {
-      res.status(404).json({ message: 'Product not found' });
+
+    try {
+      const deletedProduct = await productRepository.delete(req.params.id);
+
+      if (deletedProduct.affected === 1) {
+        return res.json({ message: 'Product deleted successfully' });
+      } else {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
 }
