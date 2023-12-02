@@ -29,8 +29,4 @@ export class Purchase extends BaseEntity{
   @Column({ length: 45 })
   active: string;
 
-  @Column({ length: 45 })
-  adalberto: string;
-
-
 }

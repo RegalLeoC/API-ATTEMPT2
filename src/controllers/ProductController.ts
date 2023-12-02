@@ -116,26 +116,19 @@ export default class ProductController {
   static updateProduct = async (req: Request, res: Response) => {
     const productRepository = getRepository(Product);
     const userRepository = getRepository(User);
-
+  
     try {
       const userId = parseInt(req.params.id, 10);
-      const update_user_FK = await userRepository.findOne({
-        where: { id: userId },
-      } as FindOneOptions<User>);
-
-      if (!update_user_FK) {
-        return res.status(404).json({ message: 'User not found for update' });
-      }
-
       const productId = parseInt(req.params.id, 10);
+  
       const existingProduct = await productRepository.findOne({
         where: { idproducts: productId },
       });
-
+  
       if (!existingProduct) {
         return res.status(404).json({ message: 'Product not found' });
       }
-
+  
       const {
         name,
         description,
@@ -144,10 +137,26 @@ export default class ProductController {
         maker,
         stock,
         measurement,
-        type,      // Add handling for 'type' column
-        Barcode,   // Add handling for 'Barcode' column
+        type,
+        Barcode,
+        updateUserId, // Include the update user ID in the request body
       } = req.body;
-
+  
+      // Check if updateUserId is a valid integer
+      const updateUserIdInt = parseInt(updateUserId, 10);
+      if (isNaN(updateUserIdInt)) {
+        return res.status(400).json({ message: 'Invalid update user ID' });
+      }
+  
+      // Check if the update user exists
+      const update_user_FK = await userRepository.findOne({
+        where: { id: updateUserIdInt },
+      });
+  
+      if (!update_user_FK) {
+        return res.status(404).json({ message: 'Update user not found' });
+      }
+  
       existingProduct.name = name || existingProduct.name;
       existingProduct.description = description || existingProduct.description;
       existingProduct.price = price || existingProduct.price;
@@ -155,18 +164,19 @@ export default class ProductController {
       existingProduct.maker = maker || existingProduct.maker;
       existingProduct.stock = stock || existingProduct.stock;
       existingProduct.measurement = measurement || existingProduct.measurement;
-      existingProduct.type = type || existingProduct.type;       // Update 'type' column
-      existingProduct.Barcode = Barcode || existingProduct.Barcode; // Update 'Barcode' column
+      existingProduct.type = type || existingProduct.type;
+      existingProduct.Barcode = Barcode || existingProduct.Barcode;
       existingProduct.update_user_FK = update_user_FK;
-
+  
       await productRepository.save(existingProduct);
-
+  
       return res.json(existingProduct);
     } catch (error) {
       console.error('Error updating product:', error);
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+  
 
   static deleteProduct = async (req: Request, res: Response) => {
     const productRepository = getRepository(Product);
