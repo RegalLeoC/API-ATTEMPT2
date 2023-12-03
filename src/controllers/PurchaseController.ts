@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
 import { Purchase } from "../entities/Purchase";
 import { DeepPartial, getRepository } from "typeorm";
-// import new from './UserController';
+import { DetailsBuy } from "../entities/DetailsBuy";
 
-
-class PurchasController 
+class PurchaseController 
 {
 
     async getPurchases(req: Request, res : Response)
@@ -56,51 +55,59 @@ class PurchasController
     }
 
     
-    async createPurchase(req: Request, res: Response)
-    {
-        try
-        {
-            const { description, client_name, last_name ,total_price, total_products, create_user, active} = req.body;
-
-
-            if (!description || !client_name || !last_name || !total_price || !total_products || !create_user || !active)
-            {
-                return res.status(400).json( {error: "Error, Empty Data"});
-            }
-            
-
-            //Verificar que si jale, ya que es un arreglo ahora
-            const purchaseRepository = getRepository(Purchase)
-            const partialPurchaseArray = [
-               {
-                description,
-                client_name, 
-                last_name,
-                total_price, 
-                total_products, 
-                create_date : new Date(),
-                create_user,
-                update_date: new Date(),
-                active,
-               },
-                
-              ];
-
-
-
-            const newPurchase = purchaseRepository.create(partialPurchaseArray);
-            await purchaseRepository.save(newPurchase);
-
-
-            return res.status(201).json(newPurchase);
+    async createPurchase(req: Request, res: Response) {
+        try {
+          const { description, client_name, last_name, total_price, total_products, create_user, active, details } = req.body;
+      
+          // Data validation
+          if (!description || !client_name || !last_name || isNaN(total_price) || isNaN(total_products) || typeof active !== 'boolean' || !details) {
+            return res.status(400).json({ error: "Invalid or missing data in the request body" });
+          }
+      
+          // Date handling
+          const create_date = new Date();
+          const update_date = new Date();
+      
+          const purchaseRepository = getRepository(Purchase);
+          const detailsBuyRepository = getRepository(DetailsBuy);
+      
+          // Create purchase entity
+          const newPurchase = purchaseRepository.create({
+            description,
+            client_name,
+            last_name,
+            total_price,
+            total_products,
+            create_date,
+            create_user,
+            update_date,
+            active,
+          });
+      
+          // Save purchase entity to get its ID
+          await purchaseRepository.save(newPurchase);
+      
+          // Create and associate DetailsBuy entities
+          const detailsBuyEntities = details.map((detail: any) => {
+            return detailsBuyRepository.create({
+              product: detail.product,
+              order: detail.order,
+              create_user: detail.create_user,
+              update_date: new Date(),
+              purchase: newPurchase, // Associate with the newly created Purchase
+            });
+          });
+      
+          // Save DetailsBuy entities
+          await detailsBuyRepository.save(detailsBuyEntities);
+      
+          return res.status(201).json(newPurchase);
+        } catch (err) {
+          console.error('Error caught:', err);
+          return res.status(500).json({ err: 'Internal Server Error' });
         }
-        catch(err)
-        {
-            console.error('Error caught:', err);
-            return res.status(500).json({ err: 'Internal Server Error'});
-        }
-        
-    }
+      }
+       
 }
 
-export default new PurchasController();
+export default new PurchaseController();
