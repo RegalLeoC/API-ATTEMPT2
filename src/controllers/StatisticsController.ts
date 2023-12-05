@@ -14,11 +14,25 @@ class StatisticsController
     {
         try {
             const statisticsRepository = getRepository(Statistics);
+
             const statistics = await statisticsRepository.find({
-                relations: ['product'],
+                relations: ['product']
             });
 
-            return res.json(statistics);
+
+            const statisticsData = statistics.map(stat => (
+                {
+                    revenue: stat.revenue,
+                    quantity_sold: stat.quantity_sold,
+                    date: stat.date,
+                    product: stat.product ? {
+                        idproducts: stat.product.idproducts,
+                        name: stat.product.name,
+                    } :null ,
+                }
+            ))
+
+            return res.json(statisticsData);
         } catch (err) {
             console.error('Error caught:', err);
             return res.status(500).json({ err: 'Internal Server Error' });
@@ -30,7 +44,7 @@ class StatisticsController
         try {
             const statiscsId = parseInt(req.params.id, 10);
             const statisticsRepository = getRepository(Statistics);
-            const productStatistic = await statisticsRepository.findOne({ where: {id: statiscsId}, relations: ['product']});
+            const productStatistic = await statisticsRepository.findOne({ where: {id: statiscsId}, relations: ['product'] });
 
             if (!productStatistic) {
                 return res.status(404).json({ error: 'Statistics not found for the specified product' });
@@ -39,8 +53,19 @@ class StatisticsController
             // const totalRevenue = parseFloat(productStatistic.revenue);
             // const totalQuantitySold = parseFloat(productStatistic.quantity_sold);
 
+            const statisticsData = 
+                {
+                    revenue: productStatistic.revenue,
+                    quantity_sold: productStatistic.quantity_sold,
+                    date: productStatistic.date,
+                    product: productStatistic.product ? {
+                        idproducts: productStatistic.product.idproducts,
+                        name: productStatistic.product.name,
+                    } :null ,
+                }
             
-            return res.json(productStatistic)
+            
+            return res.json(statisticsData)
         }
         catch(err)
         {
@@ -54,16 +79,16 @@ class StatisticsController
     {
         try
         {
-            const { product_id, revenue, quantity_sold } = req.body;
+            const { revenue, quantity_sold, productId} = req.body;
 
 
-            if (!product_id || !revenue || !quantity_sold)
+            if (!productId || !revenue || !quantity_sold)
             {
                 return res.status(400).json( {error: "Error, Empty Data"});
             }
             
             const statisticsRepository = getRepository(Statistics)
-            const product = await getRepository(Product).findOne({ where : { idproducts: product_id }});
+            const product = await getRepository(Product).findOne({ where : { idproducts: productId }});
 
             if(!product)
             {
@@ -72,9 +97,21 @@ class StatisticsController
                     error: "Producto Not Find"
                 })
             }
+            const partialStatisticArray = [
+                {
+                    
+                    revenue, 
+                    quantity_sold,
+                    date: new Date(),
+                    product : {
+                        idproducts: product.idproducts,
+                        name: product.name,
+                    },
+                }
+            ]
+            const newStatistic = statisticsRepository.create(partialStatisticArray);
 
-
-            // const partialStatisticArray = [
+             // const partialStatisticArray = [
             //    {
             //     product_id, 
             //     revenue, 
@@ -83,16 +120,6 @@ class StatisticsController
             //    },
                 
             //   ];
-            const newStatistic = statisticsRepository.create(
-                {
-
-                    product,
-                    revenue, 
-                    quantity_sold,
-                    date: new Date(),
-
-                }
-            );
             await statisticsRepository.save(newStatistic);
             return res.status(201).json(newStatistic);
         }
