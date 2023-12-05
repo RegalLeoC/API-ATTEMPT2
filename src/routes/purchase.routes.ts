@@ -1,14 +1,14 @@
+// src/routes/purchase.routes.ts
 import express from 'express';
+import authenticateJWT from '../middleware/authenticationMiddleware';
+
 import PurchaseController from '../controllers/PurchaseController';
 
-const router =  express.Router();
+const router = express.Router();
 
-router.get('/purchases', PurchaseController.getPurchases);
+// Protected routes (require authentication)
+router.get('/purchases', authenticateJWT, PurchaseController.getPurchases);
+router.get('/purchase/:id', authenticateJWT, PurchaseController.getPurchaseById);
+router.post('/purchase', authenticateJWT, PurchaseController.createPurchase);
 
-router.get('/purchase/:id', PurchaseController.getPurchaseById)
-
-
-router.post('/purchase', PurchaseController.createPurchase)
-
-
-export default router
+export default router;
