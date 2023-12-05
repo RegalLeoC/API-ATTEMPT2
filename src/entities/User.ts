@@ -31,5 +31,6 @@ export class User extends BaseEntity{
 
   @Column()
   phone_number: number;
+
 }
 

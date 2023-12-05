@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {Purchase} from './Purchase';
 
 @Entity()
 export class DetailsBuy extends BaseEntity{
@@ -8,12 +9,17 @@ export class DetailsBuy extends BaseEntity{
   @Column({ length: 50 })
   product: string;
 
-  @Column({ length: 50 })
-  order: string;
+  @Column({type: 'int'})
+  order: number;
 
   @Column({ length: 50 })
   create_user: string;
 
-  @Column({ length: 45 })
-  update_date: string; // Consider using a date/time type
+  @Column({type: 'timestamp'})
+  update_date: Date; 
+
+  @ManyToOne(() => Purchase, (purchase) => purchase.details)
+  @JoinColumn({ name: 'purchase_id' })
+  purchase: Purchase;
+
 }

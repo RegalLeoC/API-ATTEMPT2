@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn} from 'typeorm';
+import {DetailsBuy} from './DetailsBuy';
 
-@Entity()
+@Entity( {name: 'purchase'})
 export class Purchase extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,20 +13,30 @@ export class Purchase extends BaseEntity{
   client_name: string;
 
   @Column({ length: 45 })
-  total_price: string; // Consider using a numeric type
+  last_name: string;
 
-  @Column({ length: 45 })
-  total_products: string; // Consider using a numeric type
+  @Column({ type: 'decimal', precision: 10, scale: 2})
+  total_price: number; // Consider using a numeric type
 
-  @Column('datetime')
+  @Column({ type: 'int' })
+  total_products: number; 
+
+  @Column({type: 'timestamp'})
   create_date: Date;
 
   @Column({ length: 45 })
   create_user: string;
 
-  @Column('datetime')
+  @Column({type: 'timestamp'})
   update_date: Date;
 
-  @Column({ length: 45 })
-  active: string;
+  @Column({ type: 'boolean'})
+  active: boolean;
+
+  @OneToMany(() => DetailsBuy, (detailsBuy) => detailsBuy.purchase, { cascade: true })
+  @JoinColumn()
+  details: DetailsBuy[];
+
 }
+
+
