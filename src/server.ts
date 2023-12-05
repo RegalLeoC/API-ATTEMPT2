@@ -18,7 +18,6 @@ AppDataSource.then(async(connection) => {
     console.log('Connected to supermarket Database')
 
     app.use('/api', userRoutes);
-
     app.use('/api', PromotionalProductsRoutes);
     app.use('/api', purchaseRoutes);
     app.use('/api', statisticsRoutes);

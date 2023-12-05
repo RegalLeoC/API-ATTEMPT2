@@ -1,51 +1,52 @@
 import { Request, Response } from "express";
 import { Statistics } from "../entities/Statistics";
 import { DeepPartial, getRepository } from "typeorm";
+import { Product } from "../entities/Product";
+import { start } from "repl";
+import { error } from "console";
 // import new from './UserController';
 
 
 class StatisticsController 
 {
 
-    async getStatistics(req: Request, res : Response)
+    async getStatistics(req: Request, res:Response)
     {
-        try
-        {
+        try {
             const statisticsRepository = getRepository(Statistics);
-            const statistics = await statisticsRepository.find();
+            const statistics = await statisticsRepository.find({
+                relations: ['product'],
+            });
+
             return res.json(statistics);
-        }
-        catch(err)
-        {
-            console.log(err);
+        } catch (err) {
             console.error('Error caught:', err);
-            return res.status(500).json({ err: 'Internal Server Error'});
+            return res.status(500).json({ err: 'Internal Server Error' });
         }
     }
 
     async getStatisticsById(req: Request, res:Response)
     {
-        try
-        {
-            const statisticsId = parseInt(req.params.id, 10);
+        try {
+            const statiscsId = parseInt(req.params.id, 10);
             const statisticsRepository = getRepository(Statistics);
+            const productStatistic = await statisticsRepository.findOne({ where: {id: statiscsId}, relations: ['product']});
 
-
-            const statistics = await statisticsRepository.findOne( { where : {id : statisticsId}});
-
-            if(!statistics)
-            {
-                return res.status(404).json({ error: "Statistic Not Found"}) 
+            if (!productStatistic) {
+                return res.status(404).json({ error: 'Statistics not found for the specified product' });
             }
 
+            // const totalRevenue = parseFloat(productStatistic.revenue);
+            // const totalQuantitySold = parseFloat(productStatistic.quantity_sold);
 
-            return res.json(statistics)
+            
+            return res.json(productStatistic)
         }
         catch(err)
         {
-            console.log(err);
-            return res.status(500).json({ err: 'Internal Server Error PurchaseID'});
-        }
+            console.log(err)
+            return res.status(500).json({  err: 'Internal Server Error' })
+        }   
     }
 
     
@@ -53,34 +54,46 @@ class StatisticsController
     {
         try
         {
-            const { purchase_id , product_id, revenue, quantity_sold } = req.body;
+            const { product_id, revenue, quantity_sold } = req.body;
 
 
-            if (!purchase_id || !product_id || !revenue || !quantity_sold)
+            if (!product_id || !revenue || !quantity_sold)
             {
                 return res.status(400).json( {error: "Error, Empty Data"});
             }
             
-
-            
             const statisticsRepository = getRepository(Statistics)
-            const partialStatisticArray = [
-               {
-                purchase_id, 
-                product_id, 
-                revenue, 
-                quantity_sold, 
-                date: new Date(),
-               },
+            const product = await getRepository(Product).findOne({ where : { idproducts: product_id }});
+
+            if(!product)
+            {
+                return res.status(404).json( 
+                {
+                    error: "Producto Not Find"
+                })
+            }
+
+
+            // const partialStatisticArray = [
+            //    {
+            //     product_id, 
+            //     revenue, 
+            //     quantity_sold, 
+            //     date: new Date(),
+            //    },
                 
-              ];
+            //   ];
+            const newStatistic = statisticsRepository.create(
+                {
 
+                    product,
+                    revenue, 
+                    quantity_sold,
+                    date: new Date(),
 
-
-            const newStatistic = statisticsRepository.create(partialStatisticArray);
+                }
+            );
             await statisticsRepository.save(newStatistic);
-
-
             return res.status(201).json(newStatistic);
         }
         catch(err)

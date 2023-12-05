@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity ,CreateDateColumn, UpdateDateColumn} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity ,CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany, ManyToOne, JoinColumn} from 'typeorm';
+import { Purchase } from './Purchase';
+import { Product } from './Product';
 
 
 @Entity()
@@ -8,12 +10,6 @@ export class Statistics extends BaseEntity
   id: number;
 
   @Column({ length: 50 })
-  purchase_id: string;
-
-  @Column({ length: 50 })
-  product_id: string;
-
-  @Column({ length: 50 })
   revenue: string;
 
   @Column({length: 50})
@@ -21,5 +17,16 @@ export class Statistics extends BaseEntity
 
   @Column('datetime')
   date : Date;
+
+  
+  // @ManyToOne(() => Purchase, purchase => purchase.statistics)
+  // @JoinColumn({name: "purchase_id"})
+  // purchase: Purchase;
+
+  @ManyToOne(() => Product, product => product.statistics)
+  @JoinColumn({name: "product_id"})
+  product: Product;
+
+  
 }
 

@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn} from 'typeorm';
 import {DetailsBuy} from './DetailsBuy';
+import { Statistics } from './Statistics';
 
 @Entity( {name: 'purchase'})
 export class Purchase extends BaseEntity{
@@ -36,6 +37,10 @@ export class Purchase extends BaseEntity{
   @OneToMany(() => DetailsBuy, (detailsBuy) => detailsBuy.purchase, { cascade: true })
   @JoinColumn()
   details: DetailsBuy[];
+
+
+  // @OneToMany(() => Statistics, statistics => statistics.product)
+  // statistics: Statistics[];
 
 }
 
