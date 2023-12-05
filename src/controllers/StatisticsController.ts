@@ -25,6 +25,7 @@ class StatisticsController
                     revenue: stat.revenue,
                     quantity_sold: stat.quantity_sold,
                     date: stat.date,
+                    create_user : stat.create_user,
                     product: stat.product ? {
                         idproducts: stat.product.idproducts,
                         name: stat.product.name,
@@ -58,6 +59,7 @@ class StatisticsController
                     revenue: productStatistic.revenue,
                     quantity_sold: productStatistic.quantity_sold,
                     date: productStatistic.date,
+                    create_user : productStatistic.create_user,
                     product: productStatistic.product ? {
                         idproducts: productStatistic.product.idproducts,
                         name: productStatistic.product.name,
@@ -79,10 +81,10 @@ class StatisticsController
     {
         try
         {
-            const { revenue, quantity_sold, productId} = req.body;
+            const { quantity_sold, productId, create_user} = req.body;
 
 
-            if (!productId || !revenue || !quantity_sold)
+            if (!productId || !quantity_sold || !create_user)
             {
                 return res.status(400).json( {error: "Error, Empty Data"});
             }
@@ -97,18 +99,28 @@ class StatisticsController
                     error: "Producto Not Find"
                 })
             }
-            const partialStatisticArray = [
+
+            if (typeof product.price !== 'number') {
+                return res.status(400).json({
+                    error: "Error, 'price' property is missing or not a number in the product"
+                });
+            }
+
+            const partialStatisticArray = 
+            
                 {
                     
-                    revenue, 
+                    revenue : quantity_sold * product.price, 
                     quantity_sold,
                     date: new Date(),
+                    create_user,
                     product : {
                         idproducts: product.idproducts,
                         name: product.name,
                     },
                 }
-            ]
+            
+            console.log(partialStatisticArray)
             const newStatistic = statisticsRepository.create(partialStatisticArray);
 
              // const partialStatisticArray = [

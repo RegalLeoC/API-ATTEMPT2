@@ -9,14 +9,17 @@ export class Statistics extends BaseEntity
     @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
-  revenue: string;
+  @Column({ type: 'decimal', precision: 10, scale: 2})
+  revenue: number;
 
-  @Column({length: 50})
-  quantity_sold: string;
+  @Column({type: 'int'})
+  quantity_sold: number;
 
   @Column('datetime')
   date : Date;
+
+  @Column({ length: 45 })
+  create_user: string;
 
   
   // @ManyToOne(() => Purchase, purchase => purchase.statistics)
