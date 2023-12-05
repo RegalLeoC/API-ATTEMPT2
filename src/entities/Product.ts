@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity ,CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { User } from './User';
 
 @Entity()
@@ -30,14 +30,16 @@ export class Product extends BaseEntity{
   @Column('datetime')
   create_date: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true, cascade: true, onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'createUserFKId' }) 
   create_user_FK: User;
+
+  @ManyToOne(() => User, { eager: true, cascade: true, onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'updateUserFKId' })
+  update_user_FK: User;
 
   @Column('datetime')
   update_date: Date;
-
-  @ManyToOne(() => User)
-  update_user_FK: User;
 
   @Column()
   active: number;
