@@ -22,6 +22,7 @@ class StatisticsController
 
             const statisticsData = statistics.map(stat => (
                 {
+                    id : stat.id,
                     revenue: stat.revenue,
                     quantity_sold: stat.quantity_sold,
                     date: stat.date,
@@ -56,6 +57,7 @@ class StatisticsController
 
             const statisticsData = 
                 {
+                    id : productStatistic.id,
                     revenue: productStatistic.revenue,
                     quantity_sold: productStatistic.quantity_sold,
                     date: productStatistic.date,
