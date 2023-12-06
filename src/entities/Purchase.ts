@@ -38,10 +38,6 @@ export class Purchase extends BaseEntity{
   @JoinColumn()
   details: DetailsBuy[];
 
-
-  // @OneToMany(() => Statistics, statistics => statistics.product)
-  // statistics: Statistics[];
-
 }
 
 

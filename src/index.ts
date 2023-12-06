@@ -6,7 +6,7 @@ export const AppDataSource = createConnection({
   host: 'localhost',
   port: 3306,
   username: 'root',
-  password: '@Ak47gamer',
+  password: 'Cloud%%1234.',
   database: 'supermarket',
   synchronize: false,
   logging: true,
