@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToMany } from 'typeorm';
 import { User } from './User';
+import { Statistics } from './Statistics';
 
 @Entity()
 export class Product extends BaseEntity{
@@ -49,4 +51,7 @@ export class Product extends BaseEntity{
 
   @Column({ length: 50 })
   Barcode: string;
+
+  @OneToMany(() => Statistics, statistics => statistics.product)
+    statistics: Statistics[];
 }

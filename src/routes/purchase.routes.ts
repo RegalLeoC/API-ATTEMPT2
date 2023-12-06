@@ -1,8 +1,11 @@
 // src/routes/purchase.routes.ts
 import express from 'express';
 import authenticateJWT from '../middleware/authenticationMiddleware';
-
 import PurchaseController from '../controllers/PurchaseController';
+
+
+
+export default router
 
 const router = express.Router();
 
@@ -12,3 +15,4 @@ router.get('/purchase/:id', authenticateJWT, PurchaseController.getPurchaseById)
 router.post('/purchase', authenticateJWT, PurchaseController.createPurchase);
 
 export default router;
+
