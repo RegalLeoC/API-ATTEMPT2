@@ -7,7 +7,7 @@ import PromotionalProductsController from '../controllers/PromotionalProductsCon
 const router = express.Router();
 
 // Define routes
-router.get('/promotionalProducts', PromotionalProductsController.getAllPromotionalProduct);
+router.get('/promotionalProducts', PromotionalProductsController.getAllPromotionalProducts);
 router.get('/promotionalProducts/:id', PromotionalProductsController.getPromotionalProductById);
 // Protected routes (require authentication)
 router.post('/promotionalProducts',/*authenticateJWT,*/ PromotionalProductsController.createPromotionalProduct);
