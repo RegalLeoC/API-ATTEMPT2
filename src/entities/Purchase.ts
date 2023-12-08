@@ -38,6 +38,8 @@ export class Purchase extends BaseEntity{
   @JoinColumn()
   details: DetailsBuy[];
 
+  
+
 }
 
 

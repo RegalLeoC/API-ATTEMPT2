@@ -1,13 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import {Purchase} from './Purchase';
+import { Product } from './Product';
 
 @Entity()
 export class DetailsBuy extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
-  product: string;
+  @ManyToOne(() => Product)
+  @JoinColumn({ name: 'product_id' })
+  product: Product;
 
   @Column({type: 'int'})
   order: number;
