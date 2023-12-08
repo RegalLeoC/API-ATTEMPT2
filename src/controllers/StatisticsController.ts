@@ -4,7 +4,7 @@ import { DeepPartial, getRepository } from "typeorm";
 import { Product } from "../entities/Product";
 import { start } from "repl";
 import { error } from "console";
-// import new from './UserController';
+
 
 
 class StatisticsController 

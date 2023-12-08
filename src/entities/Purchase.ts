@@ -17,7 +17,7 @@ export class Purchase extends BaseEntity{
   last_name: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2})
-  total_price: number; // Consider using a numeric type
+  total_price: number; 
 
   @Column({ type: 'int' })
   total_products: number; 

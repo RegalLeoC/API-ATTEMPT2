@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-const secretKey = 'yourSecretKey'; // Replace with your actual secret key
+const secretKey = 'yourSecretKey'; 
 
 interface AuthenticatedRequest extends Request {
   user?: any;

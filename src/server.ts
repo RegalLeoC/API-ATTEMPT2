@@ -3,14 +3,11 @@ import express from 'express';
 import { AppDataSource } from './index';
 import authenticateJWT from './middleware/authenticationMiddleware';
 import userRoutes from './routes/user.routes';
-
-import { User } from './entities/User';
 import PromotionalProductsRoutes from './routes/PromotionalProducts.routes'
-import { PromotionalProduct } from "./entities/PromotionalProduct";
 import purchaseRoutes from './routes/purchase.routes';
 import statisticsRoutes from './routes/statistics.routes';
 import productRoutes from './routes/product.routes';
-import authRoutes from './routes/auth.routes'; // Updated import
+import authRoutes from './routes/auth.routes'; 
 
 
 const app = express();
@@ -21,13 +18,9 @@ app.use(express.json());
 AppDataSource.then(async (connection) => {
   console.log('Connected to supermarket Database');
 
-
-
-
   // Apply authentication middleware globally, excluding authRoutes
   app.use('/api', authenticateJWT);
 
-  // Include authRoutes along with other resource routes
   app.use('/auth', authRoutes);
   app.use('/api', userRoutes);
   app.use('/api', PromotionalProductsRoutes);

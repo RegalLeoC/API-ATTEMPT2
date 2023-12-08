@@ -7,10 +7,10 @@ import UserController from '../controllers/UserController';
 const router = express.Router();
 
 // Define routes
-router.get('/users', authenticateJWT, UserController.getAllUsers);
-router.get('/users/:id', authenticateJWT, UserController.getUserById);
-router.post('/users', authenticateJWT, UserController.createUser);
-router.put('/users/:id', authenticateJWT, UserController.updateUser);
-router.delete('/users/:id', authenticateJWT, UserController.deleteUser);
+router.get('/users', /*authenticateJWT,*/ UserController.getAllUsers);
+router.get('/users/:id', /*authenticateJWT,*/ UserController.getUserById);
+router.post('/users', /*authenticateJWT,*/ UserController.createUser);
+router.put('/users/:id', /*authenticateJWT,*/ UserController.updateUser);
+router.delete('/users/:id',/*authenticateJWT,*/ UserController.deleteUser);
 
 export default router;
