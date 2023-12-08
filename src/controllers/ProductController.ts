@@ -3,6 +3,7 @@ import { getRepository, DeepPartial } from 'typeorm';
 import { Product } from '../entities/Product';
 import { User } from '../entities/User';
 import { FindOneOptions } from 'typeorm';
+import { PromotionalProduct } from '../entities/PromotionalProduct';
 
 export default class ProductController {
   static getAllProducts = async (req: Request, res: Response) => {
@@ -182,7 +183,8 @@ export default class ProductController {
     const productRepository = getRepository(Product);
 
     try {
-      const deletedProduct = await productRepository.delete(req.params.id);
+      const productId = parseInt(req.params.id, 10);
+      const deletedProduct = await productRepository.delete(productId);
 
       if (deletedProduct.affected === 1) {
         return res.json({ message: 'Product deleted successfully' });
@@ -194,4 +196,50 @@ export default class ProductController {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
+
+
+  static createPromotionalProduct = async (req: Request, res: Response) => {
+    const productRepository = getRepository(Product);
+    const promotionalProductRepository = getRepository(PromotionalProduct);
+
+    try {
+      const { productId, name, description, promotions_price, promotion_start_date, promotion_ending_date, promotion_type, product_category, manufacturer, active } = req.body;
+
+      if (!productId || !name || !description || !promotions_price || !promotion_start_date || !promotion_ending_date || active === undefined || !promotion_type) {
+        return res.status(400).json({ message: 'Missing required fields' });
+      }
+
+      const product = await productRepository.findOne(productId);
+
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+
+      const newPromotionalProduct = promotionalProductRepository.create({
+        name,
+        description,
+        promotions_price,
+        promotion_start_date,
+        promotion_ending_date,
+        active,
+        promotion_type,
+        product,
+      });
+
+      await promotionalProductRepository.save(newPromotionalProduct);
+
+      return res.status(201).json(newPromotionalProduct);
+    } catch (error) {
+      console.error('Error creating promotional product:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+  };
+
+
+
+
+
+
+
 }

@@ -1,10 +1,12 @@
+// Product.ts
 
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToMany } from 'typeorm';
 import { User } from './User';
 import { Statistics } from './Statistics';
+import { PromotionalProduct } from './PromotionalProduct';
 
 @Entity()
-export class Product extends BaseEntity{
+export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
   idproducts: number;
 
@@ -17,7 +19,7 @@ export class Product extends BaseEntity{
   @Column()
   price: number;
 
-  @Column({ length: 50, nullable: true }) // Make category nullable if it's not always applicable
+  @Column({ length: 50, nullable: true })
   category: string;
 
   @Column({ length: 50 })
@@ -29,21 +31,21 @@ export class Product extends BaseEntity{
   @Column({ length: 45 })
   measurement: string;
 
-  @Column('datetime')
+  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   create_date: Date;
 
   @ManyToOne(() => User, { eager: true, cascade: true, onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'createUserFKId' }) 
+  @JoinColumn({ name: 'createUserFKId' })
   create_user_FK: User;
 
   @ManyToOne(() => User, { eager: true, cascade: true, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'updateUserFKId' })
   update_user_FK: User;
 
-  @Column('datetime')
+  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   update_date: Date;
 
-  @Column()
+  @Column({ default: 1 })
   active: number;
 
   @Column({ length: 50 })
@@ -53,5 +55,8 @@ export class Product extends BaseEntity{
   Barcode: string;
 
   @OneToMany(() => Statistics, statistics => statistics.product)
-    statistics: Statistics[];
+  statistics: Statistics[];
+
+  @OneToMany(() => PromotionalProduct, promotionalProduct => promotionalProduct.product, { onDelete: 'CASCADE' })
+  promotions: PromotionalProduct[]; // One-to-Many relationship with PromotionalProduct
 }

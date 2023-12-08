@@ -1,8 +1,12 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { PromotionalProduct } from '../entities/PromotionalProduct';
+import { Product } from '../entities/Product';
 
 class PromotionalProductController {
+
+  private promotionalProductRepository = getRepository(PromotionalProduct);
+  private productRepository = getRepository(Product);
 
   async getAllPromotionalProduct(req: Request, res: Response) {
     try {
@@ -32,39 +36,55 @@ class PromotionalProductController {
     }
   }
 
-  async createPromotionalProduct(req: Request, res: Response) {
+  createPromotionalProduct = async (req: Request, res: Response) => {
     try {
-      const { name, description, promotions_price, promotion_start_date, promotion_ending_date, promotion_type, product_category, manufacturer, active } = req.body;
-  
-      if (!name || !description || !promotions_price || !promotion_start_date || !promotion_ending_date || active === undefined || !promotion_type) {
-        return res.status(400).json({ error: 'Name, description, promotions_price, promotion_start_date, promotion_ending_date, active, and promotion_type are required' });
-      }
-  
-      const promotionalProductRepository = getRepository(PromotionalProduct);
-      const newPromotionalProduct = promotionalProductRepository.create({
+      const {
         name,
         description,
         promotions_price,
-        promotion_start_date: new Date(promotion_start_date),
-        promotion_ending_date: new Date(promotion_ending_date),
-        active: Boolean(active), // Ensure active is a boolean
+        promotion_start_date,
+        promotion_ending_date,
         promotion_type,
         product_category,
         manufacturer,
+        active,
+        productId,
+      } = req.body;
+
+      // Check if productId is provided and is a valid integer
+      if (!productId || isNaN(productId)) {
+        return res.status(400).json({ error: 'Invalid product ID' });
+      }
+
+      // Find the product by ID
+      const product = await this.productRepository.findOne({ where: { idproducts: productId } });
+
+      // Check if the product exists
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+
+      const newPromotionalProduct = this.promotionalProductRepository.create({
+        name,
+        description,
+        promotions_price,
+        promotion_start_date,
+        promotion_ending_date,
+        active,
+        promotion_type,
+        product_category,
+        manufacturer,
+        product,
       });
-  
-      await promotionalProductRepository.save(newPromotionalProduct);
-  
+
+      await this.promotionalProductRepository.save(newPromotionalProduct);
+
       return res.status(201).json(newPromotionalProduct);
-  
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
-  }
-  
-  
-
+  } 
 
   async updatePromotionalProduct(req: Request, res: Response) {
     try {
