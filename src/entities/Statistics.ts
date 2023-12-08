@@ -4,30 +4,18 @@ import { Product } from './Product';
 
 
 @Entity()
-export class Statistics extends BaseEntity
-{
-    @PrimaryGeneratedColumn()
+export class Statistics extends BaseEntity {
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2})
-  revenue: number;
+  @Column({ type: 'int' })
+  quantitySold: number;
 
-  @Column({type: 'int'})
-  quantity_sold: number;
-
-  @Column('datetime')
-  date : Date;
-
-  @Column({ length: 45 })
-  create_user: string;
-
-  
-  // @ManyToOne(() => Purchase, purchase => purchase.statistics)
-  // @JoinColumn({name: "purchase_id"})
-  // purchase: Purchase;
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  purchaseDate: Date;
 
   @ManyToOne(() => Product, product => product.statistics)
-  @JoinColumn({name: "product_id"})
+  @JoinColumn({ name: 'productId' })
   product: Product;
 
   

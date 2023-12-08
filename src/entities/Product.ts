@@ -45,8 +45,8 @@ export class Product extends BaseEntity {
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   update_date: Date;
 
-  @Column({ default: 1 })
-  active: number;
+  @Column({ type: 'boolean', default: true })
+  active: boolean;
 
   @Column({ length: 50 })
   type: string;
@@ -58,5 +58,7 @@ export class Product extends BaseEntity {
   statistics: Statistics[];
 
   @OneToMany(() => PromotionalProduct, promotionalProduct => promotionalProduct.product, { onDelete: 'CASCADE' })
-  promotions: PromotionalProduct[]; // One-to-Many relationship with PromotionalProduct
+  promotions: PromotionalProduct[]; 
+
+
 }

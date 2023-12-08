@@ -23,8 +23,8 @@ export class User extends BaseEntity{
   @Column('datetime')
   update_date: Date;
 
-  @Column()
-  active: number;
+  @Column({ type: 'boolean', default: true })
+  active: boolean;
 
   @Column()
   age: number;

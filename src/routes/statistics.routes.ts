@@ -1,14 +1,9 @@
-import express from 'express';
-import StatisticsController from '../controllers/StatisticsController';
+import { Router } from 'express';
+import { StatisticsController } from '../controllers/StatisticsController';
 
+const router = Router();
 
-const router =  express.Router();
+router.get('/statistics/most-sold-product-day', StatisticsController.getMostItemsSoldPerDay);
+router.get('/statistics/most-purchased-hour', StatisticsController.getMostPurchasedHour);
 
-router.get('/statistics', StatisticsController.getStatistics);
-
-router.get('/statistics/:id', StatisticsController.getStatisticsById)
-
-router.post('/statistics', StatisticsController.createStatistics)
-
-
-export default router
+export default router;

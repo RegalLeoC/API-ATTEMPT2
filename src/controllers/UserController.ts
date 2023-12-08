@@ -44,13 +44,13 @@ class UserController {
       const newUser = userRepository.create({
         name,
         email,
-        password, // Note: In a real-world scenario, you should hash the password before saving it.
+        password,
         age,
         phone_number,
         create_date: new Date(),
         create_user: new Date(),
         update_date: new Date(),
-        active: 1, // Assuming 1 means active
+        active: true,
       });
 
       await userRepository.save(newUser);

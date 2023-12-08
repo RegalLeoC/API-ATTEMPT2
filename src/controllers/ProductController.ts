@@ -91,13 +91,13 @@ export default class ProductController {
         maker,
         stock,
         measurement,
-        type,      // Include 'type' in the creation process
-        Barcode,   // Include 'Barcode' in the creation process
+        type,
+        Barcode,
         create_user_FK,
         update_user_FK: create_user_FK,
         create_date: new Date(),
         update_date: new Date(),
-        active: 1,
+        active: true,
       } as DeepPartial<Product>);
 
       const savedProduct = await productRepository.save(newProduct);
