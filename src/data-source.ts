@@ -4,10 +4,10 @@ import { DataSource } from "typeorm"
 export const AppDataSource = new DataSource({
     
     "type": "mysql",
-    "host": "localhost",
+    "host": "3.224.24.153",
     "port": 3306,
-    "username": "root",
-    "password": "Cloud%%1234.",
+    "username": "admin",
+    "password": "admin",
     "database": "supermarket",
     synchronize: false,
     logging: true,
