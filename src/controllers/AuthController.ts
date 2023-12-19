@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
-import { User } from '../entities/User';
+import { User } from '../entities/User.js';
 
 const secretKey = 'yourSecretKey'; // Replace with your actual secret key
 

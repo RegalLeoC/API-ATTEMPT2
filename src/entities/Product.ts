@@ -1,9 +1,9 @@
 // Product.ts
 
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToMany } from 'typeorm';
-import { User } from './User';
-import { Statistics } from './Statistics';
-import { PromotionalProduct } from './PromotionalProduct';
+import { User } from './User.js';
+import { Statistics } from './Statistics.js';
+import { PromotionalProduct } from './PromotionalProduct.js';
 
 @Entity()
 export class Product extends BaseEntity {

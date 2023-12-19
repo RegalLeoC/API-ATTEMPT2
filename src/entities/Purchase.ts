@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, OneToMany, JoinColumn} from 'typeorm';
-import {DetailsBuy} from './DetailsBuy';
-import { Statistics } from './Statistics';
+import {DetailsBuy} from './DetailsBuy.js';
+import { Statistics } from './Statistics.js';
 
 @Entity( {name: 'purchase'})
 export class Purchase extends BaseEntity{

@@ -1,7 +1,7 @@
 // PromotionalProduct.ts
 
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
-import { Product } from './Product';
+import { Product } from './Product.js';
 
 @Entity()
 export class PromotionalProduct extends BaseEntity {

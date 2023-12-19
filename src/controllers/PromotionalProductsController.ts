@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { PromotionalProduct } from '../entities/PromotionalProduct';
-import { Product } from '../entities/Product';
+import { PromotionalProduct } from '../entities/PromotionalProduct.js';
+import { Product } from '../entities/Product.js';
 
 class PromotionalProductController {
 

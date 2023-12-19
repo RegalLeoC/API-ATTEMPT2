@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { Purchase } from "../entities/Purchase";
+import { Purchase } from "../entities/Purchase.js";
 import { DeepPartial, getRepository } from "typeorm";
-import { DetailsBuy } from "../entities/DetailsBuy";
-import { Product } from '../entities/Product';
+import { DetailsBuy } from "../entities/DetailsBuy.js";
+import { Product } from '../entities/Product.js';
 import { FindOneOptions } from 'typeorm';
 
 

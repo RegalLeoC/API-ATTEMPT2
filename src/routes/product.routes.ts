@@ -1,7 +1,7 @@
 // src/routes/productRoutes.ts
 import { Router } from 'express';
-import authenticateJWT from '../middleware/authenticationMiddleware';
-import ProductController from '../controllers/ProductController';
+import authenticateJWT from '../middleware/authenticationMiddleware.js';
+import ProductController from '../controllers/ProductController.js';
 
 const router = Router();
 

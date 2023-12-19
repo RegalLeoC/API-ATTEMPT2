@@ -9,7 +9,7 @@
     "database": "supermarket",
     "synchronize": false,
     "logging": true,
-    "entities": ["src/entities/**/*.ts"],
+    "entities": ["dist/entities/**/*.js"],
     "migrations": ["src/migrations/**/*.ts"],
     "cli": {
       "entitiesDir": "src/entities",

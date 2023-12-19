@@ -1,8 +1,8 @@
 
 // src/routes/PromotionalProducts.routes.ts
 import express from 'express';
-import authenticateJWT from '../middleware/authenticationMiddleware';
-import PromotionalProductsController from '../controllers/PromotionalProductsController';
+import authenticateJWT from '../middleware/authenticationMiddleware.js';
+import PromotionalProductsController from '../controllers/PromotionalProductsController.js';
 
 const router = express.Router();
 

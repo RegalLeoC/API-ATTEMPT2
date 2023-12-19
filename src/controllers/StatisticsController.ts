@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { Statistics } from '../entities/Statistics';
-import { Product } from '../entities/Product';
-import { Purchase } from '../entities/Purchase';
-import { DetailsBuy } from "../entities/DetailsBuy";
+import { Statistics } from '../entities/Statistics.js';
+import { Product } from '../entities/Product.js';
+import { Purchase } from '../entities/Purchase.js';
+import { DetailsBuy } from "../entities/DetailsBuy.js";
 
 export class StatisticsController {
     static async getMostItemsSoldPerDay() {

@@ -1,7 +1,7 @@
 // src/routes/purchase.routes.ts
 import express from 'express';
-import authenticateJWT from '../middleware/authenticationMiddleware';
-import PurchaseController from '../controllers/PurchaseController';
+import authenticateJWT from '../middleware/authenticationMiddleware.js';
+import PurchaseController from '../controllers/PurchaseController.js';
 
 const router = express.Router();
 

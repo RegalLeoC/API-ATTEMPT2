@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { getRepository, DeepPartial } from 'typeorm';
-import { Product } from '../entities/Product';
-import { User } from '../entities/User';
+import { Product } from '../entities/Product.js';
+import { User } from '../entities/User.js';
 import { FindOneOptions } from 'typeorm';
-import { PromotionalProduct } from '../entities/PromotionalProduct';
+import { PromotionalProduct } from '../entities/PromotionalProduct.js';
 
 export default class ProductController {
   static getAllProducts = async (req: Request, res: Response) => {

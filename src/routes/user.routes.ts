@@ -1,8 +1,8 @@
 // src/routes/user.routes.ts
 import express from 'express';
-import authenticateJWT from '../middleware/authenticationMiddleware';
+import authenticateJWT from '../middleware/authenticationMiddleware.js';
 
-import UserController from '../controllers/UserController';
+import UserController from '../controllers/UserController.js';
 
 const router = express.Router();
 

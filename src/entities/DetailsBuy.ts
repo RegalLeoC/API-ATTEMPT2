@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import {Purchase} from './Purchase';
-import { Product } from './Product';
+import {Purchase} from './Purchase.js';
+import { Product } from './Product.js';
 
 @Entity()
 export class DetailsBuy extends BaseEntity{

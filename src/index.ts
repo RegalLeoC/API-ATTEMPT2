@@ -10,7 +10,8 @@ export const AppDataSource = createConnection({
   database: 'supermarket',
   synchronize: false,
   logging: true,
-  entities: ['src/entities/**/*.ts'],
-  migrations: ['src/migrations/**/*.ts'],
+  entities: ['dist/entities/**/*.js'],
+  migrations: ['src/migrations/**/*.js'],
   subscribers: [],
 });
+

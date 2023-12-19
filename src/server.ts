@@ -1,14 +1,13 @@
-// src/app.ts
 import express from 'express';
-import { AppDataSource } from './index';
-import authenticateJWT from './middleware/authenticationMiddleware';
-import userRoutes from './routes/user.routes';
-import PromotionalProductsRoutes from './routes/PromotionalProducts.routes'
-import purchaseRoutes from './routes/purchase.routes';
-import statisticsRoutes from './routes/statistics.routes';
-import productRoutes from './routes/product.routes';
-import authRoutes from './routes/auth.routes'; 
-
+import { AppDataSource } from './index.js';
+import authenticateJWT from './middleware/authenticationMiddleware.js';
+import userRoutes from './routes/user.routes.js';
+import PromotionalProductsRoutes from './routes/PromotionalProducts.routes.js'
+import purchaseRoutes from './routes/purchase.routes.js';
+import statisticsRoutes from './routes/statistics.routes.js';
+import productRoutes from './routes/product.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import 'reflect-metadata';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +15,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 AppDataSource.then(async (connection) => {
+
+  // connection.clear();
+
   console.log('Connected to supermarket Database');
 
   // Apply authentication middleware globally, excluding authRoutes
@@ -29,6 +31,8 @@ AppDataSource.then(async (connection) => {
   app.use('/api', statisticsRoutes);
 
   app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://0.0.0.0:${PORT}`);
   });
 }).catch(error => console.error('Error connecting to supermarket', error));
+
+
